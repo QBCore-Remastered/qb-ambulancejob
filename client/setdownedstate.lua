@@ -62,20 +62,24 @@ local function handleLastStand()
     end
 end
 
----Set dead and last stand states.
 CreateThread(function()
     while true do
         local isDead = exports.qbx_medical:IsDead()
         local inLaststand = exports.qbx_medical:IsLaststand()
         if isDead or inLaststand then
             if isDead then
+                exports.npwd:setPhoneVisible(false)
+                exports.npwd:setPhoneDisabled(true)
                 handleDead(cache.ped)
             elseif inLaststand then
+                exports.npwd:setPhoneVisible(false)
+                exports.npwd:setPhoneDisabled(true)
                 handleLastStand()
             end
             Wait(0)
         else
             Wait(1000)
+            exports.npwd:setPhoneDisabled(false)
         end
     end
 end)
