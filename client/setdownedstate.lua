@@ -64,6 +64,7 @@ end
 
 ---Set dead and last stand states.
 CreateThread(function()
+    local lastUpdate = GetGameTimer()
     while true do
         local isDead = exports.qbx_medical:IsDead()
         local inLaststand = exports.qbx_medical:IsLaststand()
@@ -73,16 +74,16 @@ CreateThread(function()
             elseif inLaststand then
                 handleLastStand()
             end
+
+            local currentTime = GetGameTimer()
+            if (currentTime - lastUpdate) > 60000 then
+                doctorCount = getDoctorCount()
+                lastUpdate = currentTime
+            end
+
             Wait(0)
         else
             Wait(1000)
         end
-    end
-end)
-
-CreateThread(function()
-    while true do
-        doctorCount = getDoctorCount()
-        Wait(60000)
     end
 end)
